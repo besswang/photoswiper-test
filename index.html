@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+<title></title>
+<link rel="stylesheet" href="https://cdn.bootcss.com/photoswipe/4.1.2/photoswipe.css">
+<link rel="stylesheet" href="https://cdn.bootcss.com/photoswipe/4.1.2/default-skin/default-skin.css">
+<style>
+    ul>.mat-img{
+        width:25%;
+        margin:15px;
+    }
+    ul>.mat-img>img{
+        display:block;
+        width:100%;
+    }
+</style>
+</head>
+<body>
+<ul>
+    <li class="mat-img">
+        <img onclick="changeLargeImg(this)" sizeval="500*404,1200*1601" data-largesrc="http://chuantu.biz/t6/26/1503970352x2890149530.jpg,http://chuantu.biz/t6/26/1503970438x2890171737.jpg" src="http://chuantu.biz/t6/26/1503970284x3080471558.jpg">
+    </li>
+    <li class="mat-img">
+        <img onclick="changeLargeImg(this)" sizeval="1200*1601,500*404" data-largesrc="http://chuantu.biz/t6/26/1503970438x2890171737.jpg,http://chuantu.biz/t6/26/1503970352x2890149530.jpg" src="http://chuantu.biz/t6/26/1503970395x2890149530.jpg">
+    </li>
+</ul>
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element, as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. PhotoSwipe keeps only 3 slides in DOM to save memory. -->
+        <div class="pswp__container">
+            <!-- don't modify these 3 pswp__item elements, data is added later on -->
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <!--<button class="pswp__button pswp__button--share" title="Share"></button>-->
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+          </div>
+
+        </div>
+
+</div>
+</body>
+</html>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>
+<!-- photoSwiper JS -->
+<script src="https://cdn.bootcss.com/photoswipe/4.1.2/photoswipe.js"></script>
+<script src="https://cdn.bootcss.com/photoswipe/4.1.2/photoswipe-ui-default.js"></script>
+<script type="text/javascript">
+    function changeLargeImg(self,e){
+            // 如果提供了事件对象，则这是一个非IE浏览器
+        if ( e && e.stopPropagation ) {
+            // 因此它支持W3C的stopPropagation()方法
+            e.stopPropagation();
+        } else {
+            // 否则，我们需要使用IE的方式来取消事件冒泡
+            window.event.cancelBubble = true;
+        }
+            // 大图
+        var dataLargeSrc = $(self).attr("data-largesrc");
+        var dataimg = dataLargeSrc.split(",");
+
+        var sizeval = $(self).attr("sizeval");
+        var size = sizeval.split(",");
+        var width = [];
+        var height = [];
+        var obj = '';
+        for(var i=0;i<size.length;i++){
+            var sizeWH = size[i].split("*");
+            if(i==0){
+                obj += "[";    
+            }
+            obj += "{";
+            obj += "'src':'"+dataimg[i]+"',";
+            obj += "'w':"+sizeWH[0]+",";
+            obj += "'h':"+sizeWH[1];
+            obj += "}";
+            if(i<size.length-1){
+                obj += ",";
+            }
+            if(i==size.length-1){
+                obj += "]";
+            }
+        }
+        var str1 = eval('('+ obj +')');
+        openPhotoSwipe(str1)
+    }
+
+    var openPhotoSwipe = function(obj) {
+        var pswpElement = document.querySelectorAll('.pswp')[0];
+        var items = obj;
+        // define options (if needed)
+        var options = {
+            index:0,  //默认从第几张图片开始     
+            history: false,
+            focus: false,
+            showAnimationDuration: 0,
+            hideAnimationDuration: 0
+        };
+        var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+        gallery.init();
+    };
+    // openPhotoSwipe();
+</script>
